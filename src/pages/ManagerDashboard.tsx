@@ -44,7 +44,7 @@ const ManagerDashboard = () => {
     return new Date(checkIn.checkInTime).toDateString() === today
   }).length
 
-  const pendingFollowUps = followUps.filter(f => f.status === 'pending').length
+  const pendingFollowUps = followUps.filter(f => f.status === 'new').length
 
   const recentActivities = activities.slice(0, 5)
 
