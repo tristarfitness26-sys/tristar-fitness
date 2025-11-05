@@ -1,9 +1,0 @@
-{
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "routes": [
-    { "src": "/assets/(.*)", "dest": "/assets/$1" },
-    { "src": "/(.*)\.(js|css|map|ico|png|jpg|jpeg|svg|json)", "dest": "/$1.$2" },
-    { "src": "/(.*)", "dest": "/index.html" }
-  ]
-}
