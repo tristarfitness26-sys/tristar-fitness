@@ -1,4 +1,4 @@
-# TriStar Fitness - Gym Management System
+# Tri Star Fitness - Gym Management System
 
 A comprehensive gym management web application built with React 19, TypeScript, and Express.js. Features role-based access control, member management, invoice generation, and real-time analytics.
 

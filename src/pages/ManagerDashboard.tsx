@@ -77,7 +77,7 @@ const ManagerDashboard = () => {
   return (
     <div className="space-y-6">
       {/* Welcome Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-lg">
+      <div className="bg-gradient-to-r from-green-600 to-blue-600 text-white p-6 rounded-lg">
         <h1 className="text-3xl font-bold">Welcome back, {user?.name}!</h1>
         <p className="text-blue-100 mt-2">Here's what's happening at Tri Star Fitness today</p>
       </div>

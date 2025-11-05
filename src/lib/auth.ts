@@ -20,7 +20,7 @@ export interface AuthState {
   isLoading: boolean;
 }
 
-// Production users for TriStar Fitness
+// Production users for Tri Star Fitness
 export const sampleUsers: User[] = [
   {
     id: '1',
@@ -44,7 +44,7 @@ export const sampleUsers: User[] = [
   }
 ];
 
-// Production passwords for TriStar Fitness
+// Production passwords for Tri Star Fitness
 const userPasswords: Record<string, string> = {
   'nikhil@tristar': 'nikhilverma@tristar',
   'manager@tristar': 'manager@tristarfitness',

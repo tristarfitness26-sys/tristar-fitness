@@ -52,7 +52,7 @@ const DataManagement = () => {
 
   const handleExportPDF = (dataType: string, data: any[]) => {
     try {
-      DataExporter.exportToPDF(data, `tristar_${dataType}`, `TriStar Fitness - ${dataType}`);
+      DataExporter.exportToPDF(data, `tristar_${dataType}`, `Tri Star Fitness - ${dataType}`);
       toast({
         title: "Export Successful",
         description: `${dataType} data exported to PDF successfully.`,

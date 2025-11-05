@@ -27,7 +27,7 @@ const LandingPage = () => {
               </div>
               <div className="text-left">
                 <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-                  TriStar Fitness
+                  Tri Star Fitness
                 </h1>
                 <p className="text-xs text-gray-600 dark:text-gray-400 -mt-1">
                   Fitness & Wellness
@@ -50,7 +50,7 @@ const LandingPage = () => {
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
               Welcome to{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-tristar-600 to-green-600">
-                TriStar Fitness
+                Tri Star Fitness
               </span>
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8">
@@ -133,7 +133,7 @@ const LandingPage = () => {
               Ready to Get Started?
             </h2>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Join thousands of members who have transformed their lives with TriStar Fitness.
+              Join thousands of members who have transformed their lives with Tri Star Fitness.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/visitor-register">
@@ -160,10 +160,10 @@ const LandingPage = () => {
             <div className="w-8 h-8 bg-gradient-to-br from-tristar-500 to-tristar-600 rounded-lg flex items-center justify-center">
               <Dumbbell className="h-5 w-5 text-white" />
             </div>
-            <span className="text-xl font-bold">TriStar Fitness</span>
+            <span className="text-xl font-bold">Tri Star Fitness</span>
           </div>
           <p className="text-gray-400">
-            © 2025 TriStar Fitness. All rights reserved.
+            © 2025 Tri Star Fitness. All rights reserved.
           </p>
         </div>
       </footer>

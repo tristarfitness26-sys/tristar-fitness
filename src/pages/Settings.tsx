@@ -93,7 +93,7 @@ const Settings = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 rounded-lg">
+      <div className="bg-gradient-to-r from-green-600 to-blue-600 text-white p-6 rounded-lg">
         <h1 className="text-3xl font-bold">Settings</h1>
         <p className="text-indigo-100 mt-2">Manage gym configuration and preferences</p>
       </div>

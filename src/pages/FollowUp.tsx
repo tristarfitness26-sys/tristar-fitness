@@ -192,7 +192,7 @@ const FollowUp = () => {
         </div>
 
         {/* Create Follow-up Banner for Managers */}
-        <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-6 mb-6 text-white flex items-center justify-between shadow-lg">
+        <div className="bg-gradient-to-r from-green-600 to-blue-600 rounded-lg p-6 mb-6 text-white flex items-center justify-between shadow-lg">
           <div>
             <h2 className="text-2xl font-bold mb-2">Create New Follow-up</h2>
             <p className="text-blue-100">Schedule and manage follow-ups for members efficiently</p>

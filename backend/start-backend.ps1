@@ -1,4 +1,4 @@
-# Starts the TriStar Fitness backend server with safe working directory and simple logging
+# Starts the Tri Star Fitness backend server with safe working directory and simple logging
 $ErrorActionPreference = 'Stop'
 
 $backendDir = Split-Path -Parent $MyInvocation.MyCommand.Path

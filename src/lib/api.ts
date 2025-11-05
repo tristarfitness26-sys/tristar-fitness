@@ -1,4 +1,4 @@
-// API Client for TriStar Fitness Backend
+// API Client for Tri Star Fitness Backend
 let API_BASE_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:6868';
 
 interface ApiResponse<T = any> {

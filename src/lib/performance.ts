@@ -1,4 +1,4 @@
-// Performance optimization utilities for TriStar Fitness
+// Performance optimization utilities for Tri Star Fitness
 
 // Debounce function for search inputs
 export function debounce<T extends (...args: any[]) => any>(

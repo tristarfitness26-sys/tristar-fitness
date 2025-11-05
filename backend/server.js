@@ -14,7 +14,7 @@ const ExcelJS = require('exceljs');
 const archiver = require('archiver');
 const { syncSectionToJSON, writeSectionJSON } = require('./utils/syncToJSON');
 
-console.log('🚀 Starting TriStar Fitness Backend Server...');
+console.log('🚀 Starting Tri Star Fitness Backend Server...');
 
 // Initialize Express app
 const app = express();
@@ -174,7 +174,7 @@ app.use('/api/upload', rateLimiters.upload);
 // Swagger API documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs, {
   customCss: '.swagger-ui .topbar { display: none }',
-  customSiteTitle: 'TriStar Fitness API Documentation',
+  customSiteTitle: 'Tri Star Fitness API Documentation',
 }));
 
 // Serve JSON cache statically
@@ -226,7 +226,7 @@ app.get('/health', (req, res) => {
 // API info endpoint
 app.get('/api', (req, res) => {
   res.json({
-    name: 'TriStar Fitness API',
+    name: 'Tri Star Fitness API',
     version: '1.0.0',
     description: 'Gym Management System API',
     endpoints: {
@@ -712,7 +712,7 @@ app.use(errorHandler);
 
 // Start server
 const server = app.listen(PORT, () => {
-  console.log(`🚀 TriStar Fitness API Server running on port ${PORT}`);
+  console.log(`🚀 Tri Star Fitness API Server running on port ${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🔗 Health check: http://localhost:${PORT}/health`);
   console.log(`📚 API info: http://localhost:${PORT}/api`);

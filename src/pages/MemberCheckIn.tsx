@@ -128,7 +128,7 @@ const MemberCheckIn = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-lg">
+      <div className="bg-gradient-to-r from-green-600 to-blue-600 text-white p-6 rounded-lg">
         <h1 className="text-3xl font-bold">Member Check-in</h1>
         <p className="text-blue-100 mt-2">Manage daily member check-ins and track attendance</p>
       </div>

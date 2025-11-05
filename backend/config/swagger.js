@@ -4,9 +4,9 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'TriStar Fitness API',
+      title: 'Tri Star Fitness API',
       version: '1.0.0',
-      description: 'Comprehensive API for TriStar Fitness Gym Management System',
+      description: 'Comprehensive API for Tri Star Fitness Gym Management System',
       contact: {
         name: 'API Support',
         email: 'support@tristarfitness.com',

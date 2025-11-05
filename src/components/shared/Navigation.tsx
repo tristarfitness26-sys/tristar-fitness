@@ -58,13 +58,13 @@ const Navigation = ({ children }: NavigationProps) => {
             <div className="w-10 h-10 rounded-lg flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110 overflow-hidden">
               <img 
                 src={tristarLogoUrl} 
-                alt="TriStar Fitness" 
+                alt="Tri Star Fitness" 
                 className="w-full h-full object-cover rounded-lg"
               />
             </div>
             <div className="text-left">
               <h1 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors duration-200">
-                TriStar Fitness
+                Tri Star Fitness
               </h1>
               <p className="text-xs text-gray-600 dark:text-gray-400">
                 {user?.role === 'owner' ? 'Gym Owner' : 'Gym (Manager)'} ({user?.role})
@@ -178,13 +178,13 @@ const Navigation = ({ children }: NavigationProps) => {
                 <div className="w-10 h-10 rounded-lg flex items-center justify-center shadow-lg">
                   <img 
                     src={tristarLogoUrl} 
-                    alt="TriStar Fitness" 
+                    alt="Tri Star Fitness" 
                     className="w-full h-full object-cover rounded-lg"
                   />
                 </div>
                 <div className="text-left">
                   <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-                    TriStar Fitness
+                    Tri Star Fitness
                   </h1>
                   <p className="text-xs text-gray-600 dark:text-gray-400">
                     {user?.role === 'owner' ? 'Gym Owner' : 'Gym (Manager)'} ({user?.role})

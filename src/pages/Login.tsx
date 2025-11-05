@@ -57,14 +57,14 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo and Title */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-green-600 to-blue-600 rounded-full mb-6 shadow-lg">
             <Dumbbell className="w-10 h-10 text-white" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">TriStar Fitness</h1>
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Tri Star Fitness</h1>
           <p className="text-gray-600 dark:text-gray-300 mt-2 text-lg">Gym Management System</p>
         </div>
 
@@ -141,7 +141,7 @@ const Login = () => {
         {/* Footer */}
         <div className="text-center mt-6">
           <p className="text-xs text-gray-500">
-            © 2024 TriStar Fitness. All rights reserved.
+            © 2024 Tri Star Fitness. All rights reserved.
           </p>
         </div>
       </div>

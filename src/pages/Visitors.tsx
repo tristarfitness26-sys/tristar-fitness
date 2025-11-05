@@ -148,7 +148,7 @@ const Visitors = () => {
           </head>
           <body>
             <div class="qr-container">
-              <h2>🏋️‍♂️ TriStar Fitness</h2>
+              <h2>🏋️‍♂️ Tri Star Fitness</h2>
               <h3>Visitor Registration QR Code</h3>
               <div class="qr-code">
                 <div id="qrcode"></div>

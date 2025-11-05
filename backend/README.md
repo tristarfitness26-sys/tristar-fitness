@@ -1,6 +1,6 @@
-# TriStar Fitness Backend API
+# Tri Star Fitness Backend API
 
-A robust, production-ready backend API for the TriStar Fitness Gym Management System.
+A robust, production-ready backend API for the Tri Star Fitness Gym Management System.
 
 ## 🚀 Features
 
@@ -358,8 +358,8 @@ This project is licensed under the MIT License.
 
 - Express.js team for the excellent framework
 - The open-source community for various packages
-- TriStar Fitness team for requirements and feedback
+- Tri Star Fitness team for requirements and feedback
 
 ---
 
-**Made with ❤️ for TriStar Fitness**
+**Made with ❤️ for Tri Star Fitness**

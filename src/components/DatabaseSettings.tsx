@@ -102,7 +102,7 @@ const DatabaseSettings: React.FC<DatabaseSettingsProps> = ({ onClose }) => {
             </Button>
           </div>
           <CardDescription>
-            Manage your TriStar Fitness database and exports
+            Manage your Tri Star Fitness database and exports
           </CardDescription>
         </CardHeader>
         

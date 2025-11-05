@@ -93,7 +93,7 @@ const VisitorRegistration = () => {
 
       toast({
         title: "Registration Successful!",
-        description: `Welcome to TriStar Fitness, ${formData.name}!`,
+        description: `Welcome to Tri Star Fitness, ${formData.name}!`,
       });
 
       // Reset form
@@ -134,7 +134,7 @@ const VisitorRegistration = () => {
               </div>
               <div className="text-left">
                 <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-                  TriStar Fitness
+                  Tri Star Fitness
                 </h1>
                 <p className="text-xs text-gray-600 dark:text-gray-400 -mt-1">
                   Visitor Registration
@@ -162,7 +162,7 @@ const VisitorRegistration = () => {
               <div className="w-16 h-16 bg-gradient-to-br from-tristar-500 to-tristar-600 rounded-lg flex items-center justify-center mx-auto mb-4">
                 <QrCode className="h-8 w-8 text-white" />
               </div>
-              <CardTitle className="text-2xl">Welcome to TriStar Fitness!</CardTitle>
+              <CardTitle className="text-2xl">Welcome to Tri Star Fitness!</CardTitle>
               <p className="text-gray-600 dark:text-gray-400">
                 Please fill out the form below to register as a visitor
               </p>
