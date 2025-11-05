@@ -65,10 +65,8 @@ const Invoices = () => {
     addActivity, 
     updateInvoice, 
     updateMember,
-    pricing,
     termsAndConditions,
-    generateInvoiceNumber,
-    proteins
+    generateInvoiceNumber
   } = dataStore
   
   const [showForm, setShowForm] = useState(false)
@@ -89,20 +87,7 @@ const Invoices = () => {
     setIsLoading(false)
   }, [members, invoices, addInvoice, addActivity])
 
-  // Predefined membership packages
-  // Prices derived from settings
-  const membershipPackages = [
-    { name: 'Monthly Membership', price: pricing.monthlyFee, description: '1 month access to all facilities' },
-    { name: 'Quarterly Membership', price: pricing.quarterlyFee, description: '3 months access to all facilities' },
-    { name: 'Annual Membership', price: pricing.yearlyFee, description: '12 months access to all facilities' },
-    { name: 'Personal Training Session', price: pricing.personalTrainingFee, description: '1 hour personal training' },
-    { name: 'Group Class', price: 200, description: '1 group fitness class' },
-    { name: 'Protein Shake', price: 150, description: 'Post-workout protein shake' },
-    { name: 'Locker Rental', price: 100, description: 'Monthly locker rental' },
-  ]
-
-  // Quick list from protein store for invoicing
-  const proteinQuickItems = (proteins || []).map(p => ({ name: p.name, price: p.sellingPrice }))
+  // Quick adds removed; managers will add items manually per member
 
   const addItem = () => {
     if (currentItem.description && currentItem.price > 0) {
@@ -122,43 +107,14 @@ const Invoices = () => {
     setInvoiceItems(invoiceItems.filter(item => item.id !== id))
   }
 
-  const addPackage = (packageItem: typeof membershipPackages[0]) => {
-    const newItem: InvoiceItem = {
-      id: Date.now().toString(),
-      description: packageItem.name,
-      quantity: 1,
-      price: packageItem.price,
-      total: packageItem.price
-    }
-    setInvoiceItems([...invoiceItems, newItem])
-  }
+  // Package quick-add removed
 
-  // Auto-populate items and dates when purpose is membership and a member is selected
+  // Auto-populate dates only for membership; items are manual
   useEffect(() => {
     if (invoiceFor !== 'membership') return
     if (!selectedMember) return
     const member: any = members.find(m => m.id === selectedMember)
     if (!member) return
-
-    // Only auto-add if cart is empty to avoid overwriting protein/other selections
-    if (invoiceItems.length === 0) {
-      // Map member's membershipType to pricing
-      const type = (member.membershipType || '').toLowerCase()
-      let price = pricing.monthlyFee
-      let label = 'Monthly Membership'
-      if (type.includes('quarter')) { price = pricing.quarterlyFee; label = 'Quarterly Membership' }
-      else if (type.includes('year') || type.includes('annual')) { price = pricing.yearlyFee; label = 'Annual Membership' }
-
-      const autoItem: InvoiceItem = {
-        id: 'auto-membership',
-        description: label,
-        quantity: 1,
-        price,
-        total: price
-      }
-
-      setInvoiceItems([autoItem])
-    }
 
     // Prefer saved member dates; compute only if missing
     const savedStart: string | undefined = member.startDate || member.membershipStartDate
@@ -169,19 +125,16 @@ const Invoices = () => {
 
     if (!endISO) {
       const base = new Date(startISO)
-      if (membershipStartDate && membershipEndDate) {
-        // keep chosen dates
-      } else {
-        if (invoiceItems.find(i => i.id === 'auto-membership')?.description?.startsWith('Quarter')) base.setMonth(base.getMonth() + 3)
-        else if (invoiceItems.find(i => i.id === 'auto-membership')?.description?.startsWith('Annual')) base.setFullYear(base.getFullYear() + 1)
-        else base.setMonth(base.getMonth() + 1)
-        endISO = base.toISOString().split('T')[0]
+      if (!(membershipStartDate && membershipEndDate)) {
+        // default to 1 month; managers can override
+        base.setMonth(base.getMonth() + 1)
       }
+      endISO = endISO || base.toISOString().split('T')[0]
     }
 
     setMembershipStartDate(startISO)
     setMembershipEndDate(endISO || membershipEndDate)
-  }, [invoiceFor, selectedMember, members, pricing])
+  }, [invoiceFor, selectedMember, members])
 
   const generateInvoice = () => {
     if (!selectedMember || invoiceItems.length === 0) {
@@ -620,46 +573,7 @@ Status: ${invoice.status}
               </div>
             </div>
 
-            {/* Quick Add */}
-            {invoiceFor === 'membership' && (
-              <div>
-                <Label className="text-gray-700 dark:text-gray-300 mb-3 block">Quick Add Packages</Label>
-                <div className="flex flex-wrap gap-2">
-                  {membershipPackages.map(pkg => (
-                    <Button
-                      key={pkg.name}
-                      variant="outline"
-                      size="sm"
-                      onClick={() => addPackage(pkg)}
-                      className="text-xs hover:scale-105 transition-transform duration-200 border-tristar-300 hover:border-tristar-500 hover:bg-tristar-50 dark:hover:bg-tristar-900/30"
-                    >
-                      <Plus className="h-3 w-3 mr-1" />
-                      {pkg.name} - {formatINR(pkg.price)}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {invoiceFor === 'protein' && (
-              <div>
-                <Label className="text-gray-700 dark:text-gray-300 mb-3 block">Quick Add Products (Protein Store)</Label>
-                <div className="flex flex-wrap gap-2">
-                  {proteinQuickItems.map(item => (
-                    <Button
-                      key={item.name}
-                      variant="outline"
-                      size="sm"
-                      onClick={() => addPackage({ name: item.name, price: item.price, description: 'Protein item' } as any)}
-                      className="text-xs hover:scale-105 transition-transform duration-200 border-tristar-300 hover:border-tristar-500 hover:bg-tristar-50 dark:hover:bg-tristar-900/30"
-                    >
-                      <Plus className="h-3 w-3 mr-1" />
-                      {item.name} - {formatINR(item.price)}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-            )}
+            {/* Quick Add removed to keep invoices simple and manual */}
 
             {/* Custom Items */}
             <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
