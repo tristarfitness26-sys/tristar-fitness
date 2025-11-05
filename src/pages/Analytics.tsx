@@ -107,10 +107,11 @@ const Analytics = () => {
       window.URL.revokeObjectURL(url)
     }
     try {
-      // Preferred: POST real data
-      let res = await fetch('/api/analytics/export', {
+      // Preferred: POST real data to export-client endpoint (use auth token if available)
+      const token = localStorage.getItem('auth_token') || ''
+      let res = await fetch('/api/analytics/export-client', {
         method: 'POST',
-        headers: { 'Authorization': `Bearer demo-static-token`, 'Content-Type': 'application/json' },
+        headers: { 'Authorization': token ? `Bearer ${token}` : '', 'Content-Type': 'application/json' },
         body: JSON.stringify({ members, invoices, activities })
       })
       if (!res.ok) throw new Error('POST export failed')
@@ -118,9 +119,10 @@ const Analytics = () => {
     } catch (e) {
       try {
         // Fallback: GET server-side export
+        const token2 = localStorage.getItem('auth_token') || ''
         const res = await fetch('/api/analytics/export', {
           method: 'GET',
-          headers: { 'Authorization': `Bearer demo-static-token` },
+          headers: { 'Authorization': token2 ? `Bearer ${token2}` : '' },
         })
         if (!res.ok) throw new Error('GET export failed')
         await download(res)

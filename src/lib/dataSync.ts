@@ -46,6 +46,9 @@ export interface Invoice {
   total?: number;
   notes?: string;
   updatedAt?: string;
+  // Payments
+  paidAmount?: number;
+  amountRemaining?: number;
 }
 
 export interface FollowUp {
@@ -346,6 +349,8 @@ By signing up, you agree to these terms and conditions.`,
           ...invoice,
           id: mpId,
           amount: invoice.total ?? invoice.amount,
+          paidAmount: (invoice as any).paidAmount ?? 0,
+          amountRemaining: Math.max(0, (invoice.total ?? invoice.amount ?? 0) - ((invoice as any).paidAmount ?? 0)),
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         };
@@ -369,7 +374,17 @@ By signing up, you agree to these terms and conditions.`,
         set((state) => ({
           invoices: state.invoices.map((invoice) =>
             invoice.id === id
-              ? { ...invoice, ...updates, updatedAt: new Date().toISOString() }
+              ? { 
+                  ...invoice, 
+                  ...updates, 
+                  // auto-maintain remaining if paidAmount or total changes
+                  amountRemaining: (() => {
+                    const total = (updates.total ?? invoice.total ?? invoice.amount ?? 0) as number;
+                    const paid = (updates as any).paidAmount ?? invoice.paidAmount ?? 0;
+                    return Math.max(0, total - paid);
+                  })(),
+                  updatedAt: new Date().toISOString() 
+                }
               : invoice
           ),
           activities: [...state.activities, {

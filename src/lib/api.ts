@@ -365,6 +365,13 @@ class ApiClient {
     });
   }
 
+  async updateInvoiceStatus(id: string, status: 'pending' | 'paid' | 'overdue' | 'partial', amount_paid?: number): Promise<ApiResponse> {
+    return this.request(`/api/invoices/${id}/status`, {
+      method: 'PUT',
+      body: JSON.stringify({ status, amount_paid }),
+    });
+  }
+
   // Follow-ups
   async getFollowUps(params?: {
     status?: string;

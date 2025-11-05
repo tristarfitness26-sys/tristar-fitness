@@ -179,7 +179,34 @@ const ProteinStore = () => {
       const data = proteins || []
       const printWindow = window.open('', '_blank');
       if (printWindow) {
-        printWindow.document.write(`
+        const showProfit = Boolean(canSeeProfit);
+        const hdr = `
+          <tr>
+            <th>Product</th>
+            ${showProfit ? '<th>Base Price</th>' : ''}
+            <th>Selling Price</th>
+            ${showProfit ? '<th>Margin</th>' : ''}
+            <th>Stock</th>
+            <th>Units Sold</th>
+            ${showProfit ? '<th>Profit</th>' : ''}
+          </tr>`
+        const fmt = (n: number) => '₹' + Number(n || 0).toLocaleString();
+        const rows = data.map((p: any) => {
+          const margin = (p.sellingPrice || 0) - (p.basePrice || 0);
+          const profit = margin * (p.unitsSold || 0);
+          return `
+            <tr>
+              <td>${p.name || ''}</td>
+              ${showProfit ? `<td>${fmt(p.basePrice)}</td>` : ''}
+              <td>${fmt(p.sellingPrice)}</td>
+              ${showProfit ? `<td>${fmt(margin)}</td>` : ''}
+              <td>${p.quantityInStock ?? ''}</td>
+              <td>${p.unitsSold ?? ''}</td>
+              ${showProfit ? `<td>${fmt(profit)}</td>` : ''}
+            </tr>`
+        }).join('');
+
+        const html = `
           <html>
             <head>
               <title>Protein Store - Tri Star Fitness</title>
@@ -197,34 +224,12 @@ const ProteinStore = () => {
                 <p>Generated on: ${new Date().toLocaleDateString()}</p>
               </div>
               <table>
-                <thead>
-                  <tr>
-                    <th>Product</th>
-                    {canSeeProfit && <th>Base Price</th>}
-                    <th>Selling Price</th>
-                    {canSeeProfit && <th>Margin</th>}
-                    <th>Stock</th>
-                    <th>Units Sold</th>
-                    {canSeeProfit && <th>Profit</th>}
-                  </tr>
-                </thead>
-                <tbody>
-                  ${data.map((p: any) => `
-                    <tr>
-                      <td>${p.name}</td>
-                      ${canSeeProfit ? `<td>₹${p.basePrice}</td>` : ''}
-                      <td>₹${p.sellingPrice}</td>
-                      ${canSeeProfit ? `<td>₹${p.sellingPrice - p.basePrice}</td>` : ''}
-                      <td>${p.quantityInStock}</td>
-                      <td>${p.unitsSold}</td>
-                      ${canSeeProfit ? `<td>₹${(p.sellingPrice - p.basePrice) * p.unitsSold}</td>` : ''}
-                    </tr>
-                  `).join('')}
-                </tbody>
+                <thead>${hdr}</thead>
+                <tbody>${rows}</tbody>
               </table>
             </body>
-          </html>
-        `);
+          </html>`;
+        printWindow.document.write(html);
         printWindow.document.close();
         printWindow.print();
       }
@@ -334,16 +339,18 @@ const ProteinStore = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Revenue</CardTitle>
-            <DollarSign className="h-4 w-4 text-green-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">₹{totalRevenue.toLocaleString()}</div>
-            <p className="text-xs text-gray-600 dark:text-gray-400">From protein sales</p>
-          </CardContent>
-        </Card>
+        {canSeeProfit && (
+          <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Revenue</CardTitle>
+              <DollarSign className="h-4 w-4 text-green-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">₹{totalRevenue.toLocaleString()}</div>
+              <p className="text-xs text-gray-600 dark:text-gray-400">From protein sales</p>
+            </CardContent>
+          </Card>
+        )}
 
         {canSeeProfit && (
           <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">

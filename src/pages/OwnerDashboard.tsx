@@ -105,6 +105,23 @@ const OwnerDashboard = () => {
     })
     .slice(0, 5) // Show top 5 most urgent
 
+  // Recent expired members (last 14 days)
+  const recentExpiredMembers = members
+    .filter((m) => {
+      const expiry = (m as any).expiryDate || (m as any).endDate
+      if (!expiry) return false
+      const d = new Date(expiry)
+      const today = new Date()
+      const diffDays = Math.ceil((today.getTime() - d.getTime()) / (1000 * 60 * 60 * 24))
+      return diffDays >= 0 && diffDays <= 14
+    })
+    .sort((a, b) => {
+      const aExp = new Date((a as any).expiryDate || (a as any).endDate).getTime()
+      const bExp = new Date((b as any).expiryDate || (b as any).endDate).getTime()
+      return bExp - aExp // most recently expired first
+    })
+    .slice(0, 5)
+
   return (
     <div className="space-y-6">
       {/* Welcome Header */}
@@ -262,6 +279,38 @@ const OwnerDashboard = () => {
               <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No Expiring Memberships</h3>
               <p className="text-gray-600 dark:text-gray-400">All memberships are up to date!</p>
             </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Recent Expired Members */}
+      <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+        <CardHeader>
+          <CardTitle className="flex items-center space-x-2">
+            <AlertTriangle className="h-5 w-5 text-red-600" />
+            <span>Recent Expired Members</span>
+            <Badge variant="outline" className="ml-auto">{recentExpiredMembers.length}</Badge>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {recentExpiredMembers.length > 0 ? (
+            <div className="space-y-3">
+              {recentExpiredMembers.map((member) => {
+                const expiry = (member as any).expiryDate || (member as any).endDate
+                const daysAgo = Math.max(0, Math.ceil((new Date().getTime() - new Date(expiry).getTime()) / (1000 * 60 * 60 * 24)))
+                return (
+                  <div key={member.id} className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                    <div>
+                      <h4 className="font-medium text-gray-900 dark:text-gray-100">{member.name}</h4>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">Expired: {new Date(expiry).toLocaleDateString()}</p>
+                    </div>
+                    <Badge variant="destructive">{daysAgo === 0 ? 'Today' : `${daysAgo}d ago`}</Badge>
+                  </div>
+                )
+              })}
+            </div>
+          ) : (
+            <div className="text-center py-8 text-gray-600 dark:text-gray-400">No recent expiries in last 14 days</div>
           )}
         </CardContent>
       </Card>

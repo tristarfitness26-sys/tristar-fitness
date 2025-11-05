@@ -324,11 +324,11 @@ const EditMember = () => {
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
-                      <SelectContent>
+                    <SelectContent>
                       <SelectItem value="monthly">Monthly</SelectItem>
                       <SelectItem value="quarterly">Quarterly</SelectItem>
                       <SelectItem value="annual">Annual</SelectItem>
-                      </SelectContent>
+                    </SelectContent>
                   </Select>
                 </div>
                 <div>

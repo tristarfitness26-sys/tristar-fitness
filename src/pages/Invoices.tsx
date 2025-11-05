@@ -13,6 +13,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { isOwner, isSemiAdmin, isManager } from '@/lib/auth'
 import { format, parseISO } from 'date-fns'
 import { generateInvoicePDF, openInvoicePDFInNewTab, type InvoiceData as PDFInvoiceData } from '@/lib/pdfGenerator'
+import { apiClient } from '@/lib/api'
 
 interface InvoiceItem {
   id: string
@@ -66,7 +67,8 @@ const Invoices = () => {
     updateInvoice, 
     updateMember,
     termsAndConditions,
-    generateInvoiceNumber
+    generateInvoiceNumber,
+    refreshData
   } = dataStore
   
   const [showForm, setShowForm] = useState(false)
@@ -136,7 +138,7 @@ const Invoices = () => {
     setMembershipEndDate(endISO || membershipEndDate)
   }, [invoiceFor, selectedMember, members])
 
-  const generateInvoice = () => {
+  const generateInvoice = async () => {
     if (!selectedMember || invoiceItems.length === 0) {
       toast({
         title: "Error",
@@ -185,8 +187,21 @@ const Invoices = () => {
       items: invoiceItems,
       subtotal: subtotal,
       total: total,
-      notes: notes
+      notes: notes,
+      paidAmount: paidAmount,
+      amountRemaining: Math.max(0, total - paidAmount)
     }) as any
+
+    // Best-effort backend status sync
+    try {
+      if (paidAmount >= total) {
+        await apiClient.updateInvoiceStatus(saved.id, 'paid', total)
+      } else if (paidAmount > 0) {
+        await apiClient.updateInvoiceStatus(saved.id, 'partial', paidAmount)
+      } else {
+        await apiClient.updateInvoiceStatus(saved.id, 'pending', 0)
+      }
+    } catch {}
 
     // Add activity
     addActivity({
@@ -261,12 +276,13 @@ Status: ${invoice.status}
     alert(previewContent)
   }
 
-  const markAsPaid = (invoiceId: string) => {
+  const markAsPaid = async (invoiceId: string) => {
     try {
       // Update invoice status to paid and sync paidAmount/paidDate
       const inv = invoices.find(i => i.id === invoiceId)
       const paidTotal = (inv?.total ?? inv?.amount ?? 0) as number
-      updateInvoice(invoiceId, { status: 'paid', total: paidTotal } as any)
+      updateInvoice(invoiceId, { status: 'paid', total: paidTotal, paidAmount: paidTotal } as any)
+      try { await apiClient.updateInvoiceStatus(invoiceId, 'paid', paidTotal) } catch {}
       // Promote member to active on full payment
       if (inv?.memberId) {
         updateMember(inv.memberId, { status: 'active' as any })
@@ -861,6 +877,27 @@ Status: ${invoice.status}
                             Mark as Paid
                           </Button>
                         )}
+                        <Button
+                          variant="outline"
+                          onClick={async () => {
+                            const total = (invoice.total ?? invoice.amount ?? 0) as number
+                            const currentPaid = (invoice as any).paidAmount ?? 0
+                            const input = window.prompt(`Enter amount paid (0 - ${total})`, String(currentPaid))
+                            if (input == null) return
+                            const val = Math.max(0, Math.min(total, Number(input) || 0))
+                            const newStatus = val >= total ? 'paid' : 'partial'
+                            updateInvoice(invoice.id, { paidAmount: val, status: newStatus } as any)
+                            try { await apiClient.updateInvoiceStatus(invoice.id, newStatus as any, val) } catch {}
+                            if (newStatus === 'paid' && invoice.memberId) {
+                              updateMember(invoice.memberId, { status: 'active' } as any)
+                            }
+                            try { await refreshData() } catch {}
+                          }}
+                          className="w-full hover:bg-green-50 hover:text-green-700 hover:border-green-300 dark:hover:bg-green-900/30 dark:hover:text-green-300 transition-all duration-200"
+                        >
+                          <FileText className="h-4 w-4 mr-2" />
+                          Save Payment
+                        </Button>
                         
                         <Button
                           variant="outline"
