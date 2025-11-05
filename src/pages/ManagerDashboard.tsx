@@ -196,11 +196,12 @@ const ManagerDashboard = () => {
                       </p>
                       <button
                         onClick={() => addFollowUp({
-                          memberId: member.id,
-                          memberName: member.name,
-                          type: 'membership_renewal',
-                          status: 'pending',
-                          dueDate: (member as any).expiryDate || (member as any).endDate,
+                          name: member.name,
+                          phone: (member as any).phone || '',
+                          source: 'membership_expiry',
+                          interest: 'membership_renewal',
+                          status: 'new',
+                          followUpDate: (member as any).expiryDate || (member as any).endDate,
                           notes: `Membership expiring in ${daysLeft} day(s)`
                         })}
                         className="text-sm px-3 py-1 border border-blue-300 rounded-md text-blue-700 hover:bg-blue-50 dark:border-blue-600 dark:text-blue-300"
