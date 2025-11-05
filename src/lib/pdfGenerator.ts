@@ -2,7 +2,8 @@ import jsPDF from 'jspdf'
 // Import logo for embedding in invoice header
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore - Vite will treat this as a URL string
-import tristarLogoUrl from '../../Images/tristarimage.jpg'
+// Use public asset path so Vercel/Vite can resolve without bundling
+const tristarLogoUrl = '/tristar-logo.jpg'
 
 export interface InvoiceData {
   id: string
