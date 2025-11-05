@@ -36,6 +36,9 @@ class SQLiteDatabase {
             const migrations = [
                 // Add expiry_date column to members table if it doesn't exist
                 `ALTER TABLE members ADD COLUMN expiry_date DATE`,
+                // Add payment tracking columns to invoices if not exist
+                `ALTER TABLE invoices ADD COLUMN amount_paid DECIMAL(10,2)`,
+                `ALTER TABLE invoices ADD COLUMN amount_remaining DECIMAL(10,2)`,
                 // Add proteins table if it doesn't exist
                 `CREATE TABLE IF NOT EXISTS proteins (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,

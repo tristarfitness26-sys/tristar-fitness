@@ -161,14 +161,7 @@ const EditMember = () => {
     })
   }
 
-  const getMembershipPrice = (type: string) => {
-    switch (type) {
-      case 'monthly': return pricing.monthlyFee
-      case 'quarterly': return pricing.quarterlyFee
-      case 'annual': return pricing.yearlyFee
-      default: return pricing.monthlyFee
-    }
-  }
+  // Removed membership price display: revenue is invoice-based now
 
   const saveChanges = () => {
     if (!formData.name || !formData.email || !formData.phone) {
@@ -331,11 +324,11 @@ const EditMember = () => {
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="monthly">Monthly - {formatINR(pricing.monthlyFee)}</SelectItem>
-                      <SelectItem value="quarterly">Quarterly - {formatINR(pricing.quarterlyFee)}</SelectItem>
-                      <SelectItem value="annual">Annual - {formatINR(pricing.yearlyFee)}</SelectItem>
-                    </SelectContent>
+                      <SelectContent>
+                      <SelectItem value="monthly">Monthly</SelectItem>
+                      <SelectItem value="quarterly">Quarterly</SelectItem>
+                      <SelectItem value="annual">Annual</SelectItem>
+                      </SelectContent>
                   </Select>
                 </div>
                 <div>
@@ -392,10 +385,6 @@ const EditMember = () => {
               <div className="flex justify-between">
                 <span className="text-sm text-gray-600">Type:</span>
                 <span className="font-medium">{member.membershipType}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Price:</span>
-                <span className="font-medium">{formatINR(getMembershipPrice(member.membershipType))}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-sm text-gray-600">Status:</span>

@@ -61,14 +61,7 @@ const Members = () => {
     }
   }
 
-  const getMembershipPrice = (type: string) => {
-    switch (type) {
-      case 'monthly': return pricing.monthlyFee
-      case 'quarterly': return pricing.quarterlyFee
-      case 'annual': return pricing.yearlyFee
-      default: return pricing.monthlyFee
-    }
-  }
+  // Removed membership price display: revenue is invoice-based now
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -401,7 +394,7 @@ const Members = () => {
                         </div>
                       </div>
                       <div className="mt-2 text-sm text-gray-500">
-                        <span className="mr-4">Membership: {member.membershipType} ({formatINR(getMembershipPrice(member.membershipType))})</span>
+                        <span className="mr-4">Membership: {member.membershipType}</span>
                         <span className="mr-4">Total Visits: {member.totalVisits}</span>
                         {member.lastVisit && (
                           <span>Last Visit: {format(parseISO(member.lastVisit), 'dd MMM yyyy HH:mm')}</span>

@@ -57,15 +57,15 @@ const OwnerDashboard = () => {
   
   const totalRevenue = invoices
     .filter(inv => inv.status === 'paid')
-    .reduce((sum, inv) => sum + inv.amount, 0)
+    .reduce((sum, inv) => sum + (Number((inv as any).amount_paid ?? (inv as any).amountPaid ?? inv.total ?? inv.amount) || 0), 0)
   
   const pendingRevenue = invoices
     .filter(inv => inv.status === 'pending')
-    .reduce((sum, inv) => sum + inv.amount, 0)
+    .reduce((sum, inv) => sum + (Number((inv as any).amount_remaining ?? 0) || 0), 0)
   
   const overdueRevenue = invoices
     .filter(inv => inv.status === 'overdue')
-    .reduce((sum, inv) => sum + inv.amount, 0)
+    .reduce((sum, inv) => sum + (Number((inv as any).amount_remaining ?? 0) || 0), 0)
 
   const todayCheckIns = checkIns.filter(checkIn => {
     const today = new Date().toDateString()

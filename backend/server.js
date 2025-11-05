@@ -311,6 +311,28 @@ app.post('/api/refresh-data', authenticateToken, async (req, res) => {
   }
 });
 
+// Monthly revenue endpoint from Paid invoices (amount_paid)
+app.get('/api/analytics/monthly-revenue', authenticateToken, async (req, res) => {
+  try {
+    const sqlite = req.app.locals.db;
+    const month = (req.query.month || new Date().toISOString().slice(0,7)); // YYYY-MM
+    if (!sqlite || !sqlite.db) return res.json({ month, totalPaid: 0, breakdown: [] });
+    const rows = await new Promise((resolve) => {
+      sqlite.db.all(
+        "SELECT date(created_at) as date, COALESCE(amount_paid, total, amount) as amount_paid, status FROM invoices WHERE status='paid' AND substr(created_at,1,7)=? ORDER BY date(created_at)",
+        [month],
+        (err, rs) => resolve(err ? [] : rs)
+      );
+    });
+    const total = rows.reduce((s, r) => s + Number(r.amount_paid || 0), 0);
+    const breakdown = rows.map(r => ({ date: r.date, amount: Number(r.amount_paid || 0) }));
+    res.json({ month, totalPaid: total, breakdown });
+  } catch (error) {
+    console.error('Monthly revenue error:', error);
+    res.status(500).json({ error: 'Failed to compute monthly revenue' });
+  }
+});
+
 // Analytics endpoint
 app.get('/api/analytics', authenticateToken, async (req, res) => {
   try {
@@ -333,9 +355,9 @@ app.get('/api/analytics', authenticateToken, async (req, res) => {
         }).length
       },
       revenue: {
-        total: invoices.filter(inv => inv.status === 'paid').reduce((s, i) => s + Number(i.total || 0), 0),
-        pending: invoices.filter(inv => inv.status === 'pending').reduce((s, i) => s + Number(i.total || 0), 0),
-        overdue: invoices.filter(inv => inv.status === 'overdue').reduce((s, i) => s + Number(i.total || 0), 0)
+        total: invoices.filter(inv => inv.status === 'paid').reduce((s, i) => s + Number(i.amount_paid ?? i.total ?? i.amount ?? 0), 0),
+        pending: invoices.filter(inv => inv.status === 'pending').reduce((s, i) => s + Number(i.amount_paid ?? 0), 0),
+        overdue: invoices.filter(inv => inv.status === 'overdue').reduce((s, i) => s + Number(i.amount_paid ?? 0), 0)
       },
       activities: {
         today: activities.filter(a => new Date(a.time).toDateString() === new Date().toDateString()).length
@@ -402,9 +424,9 @@ app.get('/api/analytics/export', authenticateToken, async (req, res) => {
     const activitiesSheet = workbook.addWorksheet('Activities');
 
     // Summary
-    const totalRevenue = invoices.filter(i => i.status === 'paid').reduce((s, i) => s + (Number(i.total ?? i.amount) || 0), 0);
-    const pendingRevenue = invoices.filter(i => i.status === 'pending').reduce((s, i) => s + (Number(i.total ?? i.amount) || 0), 0);
-    const overdueRevenue = invoices.filter(i => i.status === 'overdue').reduce((s, i) => s + (Number(i.total ?? i.amount) || 0), 0);
+    const totalRevenue = invoices.filter(i => i.status === 'paid').reduce((s, i) => s + (Number(i.amount_paid ?? i.total ?? i.amount) || 0), 0);
+    const pendingRevenue = invoices.filter(i => i.status === 'pending').reduce((s, i) => s + (Number(i.amount_paid ?? 0) || 0), 0);
+    const overdueRevenue = invoices.filter(i => i.status === 'overdue').reduce((s, i) => s + (Number(i.amount_paid ?? 0) || 0), 0);
     summarySheet.addRows([
       ['Metric', 'Value'],
       ['Total Members', members.length],
@@ -490,9 +512,9 @@ app.post('/api/analytics/export-client', express.json({ limit: '2mb' }), authent
     const invoicesSheet = workbook.addWorksheet('Invoices');
     const activitiesSheet = workbook.addWorksheet('Activities');
 
-    const totalRevenue = invoices.filter(i => i.status === 'paid').reduce((s, i) => s + (Number(i.total ?? i.amount) || 0), 0);
-    const pendingRevenue = invoices.filter(i => i.status === 'pending').reduce((s, i) => s + (Number(i.total ?? i.amount) || 0), 0);
-    const overdueRevenue = invoices.filter(i => i.status === 'overdue').reduce((s, i) => s + (Number(i.total ?? i.amount) || 0), 0);
+    const totalRevenue = invoices.filter(i => i.status === 'paid').reduce((s, i) => s + (Number(i.amount_paid ?? i.total ?? i.amount) || 0), 0);
+    const pendingRevenue = invoices.filter(i => i.status === 'pending').reduce((s, i) => s + (Number(i.amount_paid ?? 0) || 0), 0);
+    const overdueRevenue = invoices.filter(i => i.status === 'overdue').reduce((s, i) => s + (Number(i.amount_paid ?? 0) || 0), 0);
     summarySheet.addRows([
       ['Metric', 'Value'],
       ['Total Members', members.length],

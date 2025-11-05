@@ -24,7 +24,7 @@ async function syncSectionToJSON(db, section) {
         } else if (section === 'invoices') {
             outFile = path.join(dataDir, 'invoices.json');
             rows = await new Promise((resolve, reject) => {
-                db.all("SELECT id, member_id as memberId, member_name as memberName, amount, description, due_date as dueDate, status, items, subtotal, total, membership_start_date as membershipStartDate, membership_end_date as membershipEndDate, created_at as createdAt, updated_at as updatedAt FROM invoices", (err, rs) => {
+                db.all("SELECT id, member_id as memberId, member_name as memberName, amount, amount_paid as amountPaid, amount_remaining as amountRemaining, description, due_date as dueDate, status, items, subtotal, total, membership_start_date as membershipStartDate, membership_end_date as membershipEndDate, created_at as createdAt, updated_at as updatedAt FROM invoices", (err, rs) => {
                     if (err) reject(err); else resolve(rs);
                 });
             });

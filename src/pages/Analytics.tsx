@@ -28,7 +28,7 @@ const Analytics = () => {
   // Calculate revenue data
   const membershipRevenue = invoices
     .filter(inv => inv.status === 'paid')
-    .reduce((sum, inv) => sum + inv.amount, 0)
+    .reduce((sum, inv) => sum + (Number((inv as any).amount_paid ?? (inv as any).amountPaid ?? inv.total ?? inv.amount) || 0), 0)
 
   const proteinRevenue = proteins
     .reduce((sum, p) => sum + (p.sellingPrice * p.unitsSold), 0)
@@ -37,11 +37,11 @@ const Analytics = () => {
 
   const pendingRevenue = invoices
     .filter(inv => inv.status === 'pending')
-    .reduce((sum, inv) => sum + inv.amount, 0)
+    .reduce((sum, inv) => sum + (Number((inv as any).amount_remaining ?? 0) || 0), 0)
 
   const overdueRevenue = invoices
     .filter(inv => inv.status === 'overdue')
-    .reduce((sum, inv) => sum + inv.amount, 0)
+    .reduce((sum, inv) => sum + (Number((inv as any).amount_remaining ?? 0) || 0), 0)
 
   const proteinProfit = proteins
     .reduce((sum, p) => sum + ((p.sellingPrice - p.basePrice) * p.unitsSold), 0)
@@ -58,7 +58,7 @@ const Analytics = () => {
         const invDate = new Date(inv.createdAt)
         return inv.status === 'paid' && invDate >= monthStart && invDate <= monthEnd
       })
-      .reduce((sum, inv) => sum + inv.amount, 0)
+      .reduce((sum, inv) => sum + (Number((inv as any).amount_paid ?? (inv as any).amountPaid ?? inv.total ?? inv.amount) || 0), 0)
     
     monthlyRevenue.push({
       month: format(monthStart, 'MMM yyyy'),

@@ -825,10 +825,10 @@ router.get('/:id/stats', [
       paidInvoices: memberInvoices.filter(i => i.status === 'paid').length,
       totalRevenue: memberInvoices
         .filter(i => i.status === 'paid')
-        .reduce((sum, i) => sum + i.total, 0),
+        .reduce((sum, i) => sum + (i.amount_paid ?? i.total ?? i.amount ?? 0), 0),
       pendingAmount: memberInvoices
         .filter(i => i.status === 'pending')
-        .reduce((sum, i) => sum + i.total, 0),
+        .reduce((sum, i) => sum + (i.amount_remaining ?? i.total ?? i.amount ?? 0), 0),
       membershipDays: Math.ceil((new Date(member.expiryDate) - new Date(member.startDate)) / (1000 * 60 * 60 * 24)),
       daysUntilExpiry: Math.ceil((new Date(member.expiryDate) - new Date()) / (1000 * 60 * 60 * 24)),
       recentActivity: memberActivities

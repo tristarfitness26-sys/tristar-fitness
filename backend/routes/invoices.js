@@ -99,7 +99,9 @@ router.post('/', authenticateToken, requireManager, [
       createdAt: new Date().toISOString(),
       items,
       subtotal,
-      total
+      total,
+      amount_paid: 0,
+      amount_remaining: total
     };
 
     invoices.push(newInvoice);
@@ -123,9 +125,10 @@ router.post('/', authenticateToken, requireManager, [
   }
 });
 
-// Update invoice status
+// Update invoice status and payments
 router.put('/:id/status', authenticateToken, requireManager, [
-  body('status').isIn(['pending', 'paid', 'overdue']).withMessage('Invalid status')
+  body('status').isIn(['pending', 'paid', 'overdue', 'partial']).withMessage('Invalid status'),
+  body('amount_paid').optional().isNumeric().withMessage('amount_paid must be a number')
 ], async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -138,7 +141,16 @@ router.put('/:id/status', authenticateToken, requireManager, [
       return res.status(404).json({ error: 'Invoice not found' });
     }
 
-    invoices[invoiceIndex].status = req.body.status;
+    const { status, amount_paid } = req.body;
+    invoices[invoiceIndex].status = status;
+    if (status === 'paid') {
+      invoices[invoiceIndex].amount_paid = invoices[invoiceIndex].total;
+      invoices[invoiceIndex].amount_remaining = 0;
+    } else if (status === 'partial') {
+      const paid = Number(amount_paid ?? invoices[invoiceIndex].amount_paid ?? 0);
+      invoices[invoiceIndex].amount_paid = paid;
+      invoices[invoiceIndex].amount_remaining = Math.max(0, Number(invoices[invoiceIndex].total) - paid);
+    }
     invoices[invoiceIndex].updatedAt = new Date().toISOString();
 
     // best-effort sync
