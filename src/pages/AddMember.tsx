@@ -225,9 +225,9 @@ const AddMember = () => {
                   onChange={(e) => handleInputChange('membershipType', e.target.value)}
                   required
                 >
-                  <option value="monthly">1 Month - {formatINR(pricing.monthlyFee)}</option>
-                  <option value="quarterly">3 Months - {formatINR(pricing.quarterlyFee)}</option>
-                  <option value="annual">1 Year - {formatINR(pricing.yearlyFee)}</option>
+                  <option value="monthly">1 Month</option>
+                  <option value="quarterly">3 Months</option>
+                  <option value="annual">1 Year</option>
                 </select>
               </div>
             </div>
